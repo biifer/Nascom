@@ -6,7 +6,7 @@ public class Client implements Runnable {
 		 /*
     	 * Should implement a log file writer instead of writing to the system output. 
     	 */
-        System.out.println("Starting client");	
+        System.out.println("Starting client!");	
 	}
 
 }
