@@ -5,7 +5,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 
 /*
@@ -33,7 +34,10 @@ public class Client implements Runnable {
 	}
 
 	public void run() {
-	
+		Thread.currentThread().setName("ClientThread");
+		final Logger Log = Logger.getLogger(Nascom.class);
+		
+		Log.info("Client started!");
 		try{  
 			s = new Socket("localhost",port);  
 			os = s.getOutputStream();  

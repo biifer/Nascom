@@ -12,9 +12,6 @@ public class Nascom {
 	public static void main(String[] args) {
 
 
-		Log.info("TEST");
-
-	
 		if (args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
@@ -24,6 +21,7 @@ public class Nascom {
 			}
 		}else{
 			System.out.println("Input parameters required: Port");
+			Log.warn("Input parameters required: Port");
 			System.exit(1);
 		}
 
@@ -32,12 +30,13 @@ public class Nascom {
 		 * Start the server
 		 */
 		(new Thread(new Server(SERVER_PORT))).start();
-	
+		Log.info("Server started on port: " + SERVER_PORT);
+		
 		/*
 		 * Start the client
 		 */
 		(new Thread(new Client(CLIENT_PORT))).start();
-	
+		Log.info("Client started on port: " + CLIENT_PORT);
 		try {
 			Thread.sleep(50000);
 		} catch (InterruptedException e) {

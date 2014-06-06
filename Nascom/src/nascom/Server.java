@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 
 public class Server implements Runnable {
@@ -28,6 +29,11 @@ public class Server implements Runnable {
 	}
 
 	public void run() {
+		Thread.currentThread().setName("ServerThread");
+
+		final Logger Log = Logger.getLogger(Nascom.class);
+
+		Log.info("Server started");
 		running = true;
 		try {  
 			ss = new ServerSocket(port);  
