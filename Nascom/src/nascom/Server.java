@@ -19,21 +19,17 @@ public class Server implements Runnable {
 	InputStream is;
 	ObjectInputStream ois;
 	Message message;
-	Logger LOGGER;
 
-	/*
-	 * Constructor
-	 */
 	public Server(int port) {
 		this.port = port;
 	}
 
 	public void run() {
 		Thread.currentThread().setName("ServerThread");
-
 		final Logger Log = Logger.getLogger(Nascom.class);
+		Log.info("Server thread started!");
 
-		Log.info("Server started");
+		
 		running = true;
 		try {  
 			ss = new ServerSocket(port);  
@@ -41,18 +37,21 @@ public class Server implements Runnable {
 			is = s.getInputStream();  
 			ois = new ObjectInputStream(is);  
 		}catch(Exception e){
+			Log.error(e);
 			System.out.println(e);  
 		} 
 
 		while(running){
 			try {
+				Log.trace("Inside server loop.");
 				message = (Message)ois.readObject();
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				Log.error(e);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.error(e);
 			} 
 			if (message!=null){
+				Log.debug("Message recvieved: " + "\'" + message.getMessage() + "\'");
 				System.out.println(message.getMessage());
 			} 
 

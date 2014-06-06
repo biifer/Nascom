@@ -1,30 +1,34 @@
 package nascom;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
+
 public class Nascom {
 
 	static int port;
+	static Level level;
+	private static String DEFAULT_LEVEL = "info";
 	private static final Logger Log = Logger.getLogger(Nascom.class);
-
 	private static final int CLIENT_PORT = 1000;
 	private static final int SERVER_PORT = 1000;
 
 	public static void main(String[] args) {
 
-
 		if (args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				System.err.println("The first argument is the port and must be an integer.");
+				Log.error("Invalid port! " + e);
 				System.exit(1);
+			}if(args.length > 1){
+				level = Level.toLevel(args[1].toString());
+			}else{
+				level = Level.toLevel(DEFAULT_LEVEL);
 			}
+			Log.setLevel(level);
 		}else{
-			System.out.println("Input parameters required: Port");
-			Log.warn("Input parameters required: Port");
+			Log.error("Invalid input parameters!");
 			System.exit(1);
 		}
-
 
 		/*
 		 * Start the server
@@ -40,8 +44,7 @@ public class Nascom {
 		try {
 			Thread.sleep(50000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.error(e);
 		}
 		return;
 	}

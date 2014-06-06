@@ -1,18 +1,13 @@
 package nascom;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
-
 import org.apache.log4j.Logger;
-
 
 /*
  * This class should at some point start a GUI
  */
-
 
 public class Client implements Runnable {
 	private int port;
@@ -22,11 +17,8 @@ public class Client implements Runnable {
 	ObjectOutputStream oos;
 	Message message;
 	Scanner scan;
-	Logger LOGGER;
+	Logger Log;
 
-	/*
-	 * Constructor
-	 */
 	public Client(int port) {
 		this.port = port;
 		this.running = true;
@@ -35,8 +27,7 @@ public class Client implements Runnable {
 
 	public void run() {
 		Thread.currentThread().setName("ClientThread");
-		final Logger Log = Logger.getLogger(Nascom.class);
-		
+		Log = Logger.getLogger(Nascom.class);		
 		Log.info("Client started!");
 		try{  
 			s = new Socket("localhost",port);  
@@ -44,16 +35,18 @@ public class Client implements Runnable {
 			oos = new ObjectOutputStream(os);  
 		}
 		catch(Exception e){
-			System.err.println(e);
+			Log.trace(e);
 		}
 
 
 		while(running){
-			message = new Message(scan.next(), 1);  
+			message = new Message(scan.nextLine(), 1);  
 			try {
+				Log.debug("Sending message: " + message.getMessage());
 				oos.writeObject(message);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.trace(e);
+
 			}   
 		}
 
@@ -69,7 +62,7 @@ public class Client implements Runnable {
 			os.close();  
 			s.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.trace(e);
 		}
 		return 0;
 	}
