@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 public class Server implements Runnable {
 
+	private static final String SERVER_PORT = null;
 	int port;
 	boolean running;
 	String threadName;
@@ -30,6 +31,9 @@ public class Server implements Runnable {
 		Log.info("Server thread started!");
 
 		
+		(new Thread(new ServerConnectionHelper(SERVER_PORT))).start();
+		Log.info("ServerHelper started on port: " + SERVER_PORT);
+		
 		running = true;
 		try {  
 			ss = new ServerSocket(port);  
@@ -37,8 +41,7 @@ public class Server implements Runnable {
 			is = s.getInputStream();  
 			ois = new ObjectInputStream(is);  
 		}catch(Exception e){
-			Log.error(e);
-			System.out.println(e);  
+			Log.error(e); 
 		} 
 
 		while(running){
@@ -51,7 +54,7 @@ public class Server implements Runnable {
 				Log.error(e);
 			} 
 			if (message!=null){
-				Log.debug("Message recvieved: " + "\'" + message.getMessage() + "\'");
+				Log.debug("Message recvieved: " + "\'" + message.getMessage() + "\' from: " + message.getSourceAddr());
 				System.out.println(message.getMessage());
 			} 
 

@@ -1,8 +1,11 @@
 package nascom;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+
 import org.apache.log4j.Logger;
 
 /*
@@ -41,6 +44,11 @@ public class Client implements Runnable {
 
 		while(running){
 			message = new Message(scan.nextLine(), 1);  
+			try {
+				message.setSourceAddr(InetAddress.getLocalHost());
+			} catch (UnknownHostException e1) {
+				Log.debug(e1);
+			}
 			try {
 				Log.debug("Sending message: " + message.getMessage());
 				oos.writeObject(message);
